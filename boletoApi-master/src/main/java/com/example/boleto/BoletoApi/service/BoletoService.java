@@ -46,7 +46,7 @@ public class BoletoService {
         repository.deleteById(id);
     }
 
-    public void pagar(Long idConta, Long idBoleto) {
+    public Boleto pagar(Long idConta, Long idBoleto) {
 
             Optional<Boleto> object = repository.findById(idBoleto);
             if (!object.isPresent()) {
@@ -56,7 +56,7 @@ public class BoletoService {
             verificarSeBoletoEstaPago(boleto);
             client.pagarBoleto(idConta, boleto.getValor());
             boleto.setStatus(EnumStatus.PAGO);
-            repository.save(boleto);
+            return repository.save(boleto);
 
     }
 

@@ -18,11 +18,11 @@ public class Transferencia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long numContaDestino;
-    private Long numContaOrigem;
+    private int numContaDestino;
+    private int numContaOrigem;
     private Double valor;
 
-    public Transferencia(Long numContaDestino, Long numContaOrigem, Double valor) {
+    public Transferencia(int numContaDestino, int numContaOrigem, Double valor) {
         this.numContaDestino = numContaDestino;
         this.numContaOrigem = numContaOrigem;
         this.valor = valor;

@@ -27,10 +27,10 @@ public class TransferenciaController {
         return ResponseEntity.ok().body(service.findById(id));
     }
 
-    @PostMapping("/transferir/{contaDestino}/{contaOrigem}/{valor}")
-    public ResponseEntity<Transferencia> transferirValor(@PathVariable Long contaDestino, @PathVariable Long contaOrigem,
-                                @PathVariable Double valor) {
-        Transferencia transferencia = service.transferirValor(contaDestino, contaOrigem, valor);
+    @PostMapping("/transferir/{contaOrigem}/{valor}/{contaDestino}")
+    public ResponseEntity<Transferencia> transferirValor(@PathVariable int contaOrigem, @PathVariable Double valor,
+                                                         @PathVariable int contaDestino) {
+        Transferencia transferencia = service.transferirValor(contaOrigem, valor, contaDestino);
         return ResponseEntity.accepted().body(transferencia);
 
     }

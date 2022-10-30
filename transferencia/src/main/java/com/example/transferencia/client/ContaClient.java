@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface ContaClient {
 
     @PostMapping("/{contaOrigem}/{valor}/{contaDestino}")
-    void operacaoTransferencia(@PathVariable("contaOrigem") Long contaOrigem, @PathVariable("valor") Double valorBoleto,
-                               @PathVariable("contaDestino") Long contaDestino);
+    void operacaoTransferencia(@PathVariable("contaOrigem") int contaOrigem, @PathVariable("valor") Double valor,
+                               @PathVariable("contaDestino") int contaDestino);
 }
