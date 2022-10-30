@@ -42,7 +42,7 @@ public class ControllerExceptionHandler {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
         err.setStatus(status.value());
-        err.setError("Erro: Cliente não cadastrado com Id informado");
+        err.setError("Operacao invalida");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(status).body(err);
@@ -62,6 +62,18 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(NumeroContaInvalidaException.class)
     public ResponseEntity<StandardError> NumeroContaInvalidaException(NumeroContaInvalidaException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError();
+        err.setTimestamp(Instant.now());
+        err.setStatus(status.value());
+        err.setError("Operacao Invalida");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(CpfCadastradoException.class)
+    public ResponseEntity<StandardError> cpfCadastradoException(CpfCadastradoException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());

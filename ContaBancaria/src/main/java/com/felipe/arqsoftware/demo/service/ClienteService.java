@@ -3,6 +3,7 @@ package com.felipe.arqsoftware.demo.service;
 import com.felipe.arqsoftware.demo.model.Cliente;
 import com.felipe.arqsoftware.demo.repository.ClienteRepository;
 import com.felipe.arqsoftware.demo.service.exceptions.ClientNotFoundException;
+import com.felipe.arqsoftware.demo.service.exceptions.CpfCadastradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,13 @@ public class ClienteService {
 
     @Transactional
     public Cliente createCliente(Cliente cliente) {
+        String cpfCliente = cliente.getCpf();
+        List<Cliente> clientes = repository.findAll();
+        for (Cliente clienteCadastrado : clientes) {
+            if (cpfCliente.equals(clienteCadastrado.getCpf())) {
+                throw new CpfCadastradoException("CPF informado encontra-se em uso");
+            }
+        }
         return repository.save(cliente);
     }
 }
