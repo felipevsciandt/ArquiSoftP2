@@ -1,9 +1,6 @@
 package com.felipe.arqsoftware.demo.controller.exception;
 
-import com.felipe.arqsoftware.demo.service.exceptions.ContaNotFoundException;
-import com.felipe.arqsoftware.demo.service.exceptions.ClientNotFoundException;
-import com.felipe.arqsoftware.demo.service.exceptions.DeleteFailureException;
-import com.felipe.arqsoftware.demo.service.exceptions.SaldoInsuficienteException;
+import com.felipe.arqsoftware.demo.service.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -53,6 +50,18 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(DeleteFailureException.class)
     public ResponseEntity<StandardError> deleteFailureException(DeleteFailureException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError();
+        err.setTimestamp(Instant.now());
+        err.setStatus(status.value());
+        err.setError("Operacao Invalida");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(NumeroContaInvalidaException.class)
+    public ResponseEntity<StandardError> NumeroContaInvalidaException(NumeroContaInvalidaException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());

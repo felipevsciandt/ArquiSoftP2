@@ -6,6 +6,7 @@ import com.felipe.arqsoftware.demo.model.ContaCorrente;
 import com.felipe.arqsoftware.demo.repository.ClienteRepository;
 import com.felipe.arqsoftware.demo.repository.ContaCorrenteRepository;
 import com.felipe.arqsoftware.demo.service.exceptions.DeleteFailureException;
+import com.felipe.arqsoftware.demo.service.exceptions.NumeroContaInvalidaException;
 import com.felipe.arqsoftware.demo.service.exceptions.SaldoInsuficienteException;
 import com.felipe.arqsoftware.demo.service.exceptions.ContaNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,11 @@ public class ContaCorrenteService {
 
     @Transactional
     public ContaCorrente createAccount(ContaCorrente contaCorrente) {
+        List<ContaCorrente> contas = repository.findAll();
+        int numeroConta = contaCorrente.getNumeroConta();
+        if (verificarSeContaExisteNumeroConta(numeroConta)) {
+            throw new NumeroContaInvalidaException("Numero de conta ja cadastrado");
+        }
         Cliente cliente = clienteService.findById(contaCorrente.getCliente().getId());
         contaCorrente.setCliente(cliente);
         return repository.save(contaCorrente);
@@ -68,18 +74,26 @@ public class ContaCorrenteService {
     }
 
     @Transactional
-    public ContaCorrente transferir(Long id, Double valor, Long id2) {
-        verificarSeContExiste(id);
-        verificarSeContExiste(id2);
-        ContaCorrente contaDeposita = repository.findById(id).get();
+    public ContaCorrente transferir(int numContaOrigem, Double valor, int numContaDestino) {
+        ContaCorrente contaDeposita = verificarNumeroDaConta(numContaOrigem);
+        ContaCorrente contaRecebe = verificarNumeroDaConta(numContaDestino);
         validarSaldo(contaDeposita, valor);
-        ContaCorrente contaRecebe = repository.findById(id2).get();
         contaDeposita.setSaldo(contaDeposita.getSaldo() - valor);
         contaRecebe.setSaldo(contaRecebe.getSaldo() + valor);
         extratoService.gerarExtratoSaque(contaDeposita, contaDeposita.getSaldo() + valor);
         extratoService.gerarExtratoDeposito(contaRecebe, valor);
 
         return repository.save(contaDeposita);
+    }
+
+    private ContaCorrente verificarNumeroDaConta(int numeroConta) {
+        List<ContaCorrente> contas = repository.findAll();
+        for (ContaCorrente conta : contas) {
+            if (conta.getNumeroConta() == numeroConta) {
+                return conta;
+            }
+        }
+        throw new ContaNotFoundException("Numero de conta invalida");
     }
 
     @Transactional
@@ -98,6 +112,16 @@ public class ContaCorrenteService {
         if (!contaOptional.isPresent()) {
             throw new ContaNotFoundException("Conta nao cadastrada para o id informado");
         }
+    }
+
+    public boolean verificarSeContaExisteNumeroConta(int numConta) {
+        List<ContaCorrente> contas = repository.findAll();
+        for (ContaCorrente conta : contas) {
+            if (conta.getNumeroConta() == numConta) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void validarSaldo(ContaCorrente conta, Double quantidade) throws SaldoInsuficienteException {

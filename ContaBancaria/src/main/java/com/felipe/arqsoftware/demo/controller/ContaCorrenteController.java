@@ -51,10 +51,10 @@ public class ContaCorrenteController {
         return ResponseEntity.accepted().body(service.sacar(id, valor));
     }
 
-    @PostMapping("/transferir/{id}/{valor}/{id2}")
-    public ResponseEntity<ContaCorrente> operacaoTransferencia(@PathVariable Long id,
-                                                          @PathVariable Double valor, @PathVariable Long id2) throws SaldoInsuficienteException {
-        return ResponseEntity.accepted().body(service.transferir(id, valor, id2));
+    @PostMapping("/transferir/{numContaOrigem}/{valor}/{numContaDestino}")
+    public ResponseEntity<ContaCorrente> operacaoTransferencia(@PathVariable int numContaOrigem,
+                                                          @PathVariable Double valor, @PathVariable int numContaDestino) throws SaldoInsuficienteException {
+        return ResponseEntity.accepted().body(service.transferir(numContaOrigem, valor, numContaDestino));
     }
 
     @PostMapping("{id}/depositar/{valor}")

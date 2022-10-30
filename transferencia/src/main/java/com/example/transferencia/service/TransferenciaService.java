@@ -37,7 +37,7 @@ public class TransferenciaService {
     }
 
     @Transactional
-    public Transferencia transferirValor(Long contaDestino, Long contaOrigem, Double valor) {
+    public Transferencia transferirValor(int contaOrigem, Double valor, int contaDestino) {
         client.operacaoTransferencia(contaOrigem, valor, contaDestino);
         Transferencia transferencia = new Transferencia(contaDestino, contaOrigem, valor);
         return repository.save(transferencia);
