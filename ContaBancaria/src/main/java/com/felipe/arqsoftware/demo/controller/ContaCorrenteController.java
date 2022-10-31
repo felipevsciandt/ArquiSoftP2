@@ -57,7 +57,7 @@ public class ContaCorrenteController {
         return ResponseEntity.accepted().body(service.transferir(numContaOrigem, valor, numContaDestino));
     }
 
-    @PostMapping("{id}/depositar/{valor}")
+    @PutMapping("{id}/depositar/{valor}")
     public ResponseEntity<ContaCorrente> operacaoDepositar(@PathVariable Long id, @PathVariable Double valor) {
         return ResponseEntity.accepted().body(service.deposito(id, valor));
     }
