@@ -1,0 +1,9 @@
+# Use a imagem oficial do MySQL como base
+FROM mysql:8.0
+
+# Define variáveis de ambiente
+ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_DATABASE=arqsoft
+
+# Expõe a porta 3307
+EXPOSE 3307
