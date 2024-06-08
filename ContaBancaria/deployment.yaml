@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contabancaria-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: contabancaria
+  template:
+    metadata:
+      labels:
+        app: contabancaria
+    spec:
+      containers:
+        - name: contabancaria
+          image: contabancaria:v1.0
+          ports:
+            - containerPort: 8081
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: arqsoft
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://db:3307/arqsoft
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: root

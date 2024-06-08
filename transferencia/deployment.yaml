@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transferencia-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: transferencia
+  template:
+    metadata:
+      labels:
+        app: transferencia
+    spec:
+      containers:
+        - name: transferencia
+          image: transferencia:v1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: arqsoft
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://db:3308/arqsoft
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: root

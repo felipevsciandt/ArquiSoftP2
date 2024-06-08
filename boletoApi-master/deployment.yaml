@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boletoapi-master-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: boletoapi-master
+  template:
+    metadata:
+      labels:
+        app: boletoapi-master
+    spec:
+      containers:
+        - name: boletoapi-master
+          image: boletoapi-master:v1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: arqsoft
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://db:3306/arqsoft
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: root
