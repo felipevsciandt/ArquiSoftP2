@@ -1,9 +1,14 @@
-# Use a imagem oficial do MySQL como base
-FROM mysql:8.0
+FROM maven:3.8.1-openjdk-17-slim AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn -f pom.xml clean package
 
-# Define variáveis de ambiente
+FROM openjdk:17-slim
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8081
+
 ENV MYSQL_ROOT_PASSWORD=root
 ENV MYSQL_DATABASE=arqsoft
-
-# Expõe a porta 3307
-EXPOSE 3307
+CMD ["java", "-jar", "app.jar"]
